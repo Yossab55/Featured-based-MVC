@@ -1,17 +1,19 @@
 //+ in the name of cross
 import { JWT } from "../source/interface/JWT.js";
-import { env } from "../utils/helpers.js";
-import { AppError } from "../source/error/AppError.js";
+import { jwtConfig } from "../config/JWT.config.js";
+// import { AppError } from "../source/error/AppError.js";
 import { UNAUTHORIZED } from "../utils/constants/ResponseCode.js";
+import { appError } from "../error/app.error.js";
+import { getStack } from "../utils/helpers.js";
 
 async function requiredAuth(req, res, next) {
   const token = req.cookies.token;
   if (token) {
-    const tokenDecoded = await JWT.verifyToken(token, env("JWT_SECRET"));
+    const tokenDecoded = await JWT.verifyToken(token, jwtConfig.secret);
     req.user = { id: tokenDecoded.id };
     return next();
   }
-  throw AppError("user is not authenticated", UNAUTHORIZED);
+  throw appError.unauthorized(token, "http://test", getStack());
 }
 export { requiredAuth };
 
@@ -19,7 +21,7 @@ async function isUserLoggedIn(req, res, next) {
   const token = req.cookies.token;
   if (token) {
     try {
-      const tokenDecoded = await verify(token, env("JWT_SECRET"));
+      const tokenDecoded = await verify(token, jwtConfig.secret);
       req.locals.user = { id: tokenDecoded.id };
       return next();
     } catch (error) {

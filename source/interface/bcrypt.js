@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import { env } from "../../utils/helpers.js";
+import { bcryptConfig } from "../config/bcrypt.config.js";
 
 const Bcrypt = Object.create(bcrypt);
 
-const saltRounds = parseInt(env("SALT_Rounds"));
+const saltRounds = bcryptConfig.salt_rounds;
 
 const salt = await Bcrypt.genSalt(saltRounds);
 

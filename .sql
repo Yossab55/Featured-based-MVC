@@ -1,0 +1,37 @@
+CREATE TABLE Users (
+  user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  uuid BINARY(16) NOT NULL UNIQUE,
+  fullname VARCHAR(150) NOT NULL,
+  phone_number CHAR(15) NOT NULL UNIQUE,
+  email VARCHAR(254) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT user_id_pk PRIMARY KEY (user_id)
+);
+
+CREATE TABLE Employees (
+  employee_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  uuid BINARY(16) NOT ULL UNIQUE,
+  fullname VARCHAR(120) NOT NULL,
+  phone_number CHAR(15) NOT NULL,
+  email VARCHAR(254) NOT NULL UNIQUE,
+  password: VARCHAR NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT employee_id_pk PRIMARY KEY (employee_id)
+);
+
+CREATE TABLE Permissions (
+  permission_id INT NOT NULL AUTO_INCREMENT ,
+  permission_name VARCHAR(100) NOT NULL,
+  CONSTRAINT permission_id_pk PRIMARY KEY (permission_id)
+);
+
+CREATE TABLE EmployeePermission (
+  employee_id INT NOT NULL,
+  permission_id INT NOT NULL,
+  CONSTRAINT employee_id_fk FOREIGN KEY (employee_id)
+  REFERENCE Employees(employee_id) ON UPDATE CASCADE,
+  CONSTRAINT permission_id_fk FOREIGN KEY ( permission_id)
+  REFERENCE Permissions(permission_id) ON UPDATE CASCADE ON DELETE SET NULL
+);
